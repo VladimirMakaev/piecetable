@@ -143,4 +143,40 @@ class TextEditTest {
         assertEquals("a span of text", edit.getText(0));
 
     }
+
+    @Test
+    void testRows() {
+        var edit = TextEdit.of();
+        edit.insert(0,0, "aaa\nbbb\nccc");
+        assertEquals(3, edit.rows());
+    }
+
+
+    @Test
+    void testInserts() {
+        var edit = TextEdit.of();
+        edit.insert(0,0, "aaa\nbbb\nccc");
+        edit.insert(0,0, "ddd\n");
+        assertEquals("ddd\naaa\nbbb\nccc", edit.getText(0, edit.rows()));
+        assertEquals(4, edit.rows());
+
+    }
+
+    @Test
+    void testReplace1() {
+        var edit = TextEdit.of();
+        edit.insert(0,0, "aaa\nbbb\nccc");
+        edit.replace(0,0, 2,0, "ddd");
+        assertEquals(edit.getText(0, edit.rows()), "dddccc");
+        assertEquals(1, edit.rows());
+    }
+
+    @Test
+    void testReplace2() {
+        var edit = TextEdit.of();
+        edit.insert(0,0, "aaa\nbbb\n\nccc\n");
+        edit.replace(0,3, 3,0, "ddd");
+        assertEquals(edit.getText(0, edit.rows()), "aaadddccc\n");
+        assertEquals(2, edit.rows());
+    }
 }
